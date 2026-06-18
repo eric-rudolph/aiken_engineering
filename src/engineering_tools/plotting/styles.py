@@ -49,7 +49,7 @@ ENGINEERING_STYLE: dict[str, object] = {
 
     # Grid
     "grid.linewidth": 0.5,
-    "grid.alpha": 0.35,
+    "grid.alpha": 1.0,
 
     # legend
     "legend.frameon": True,
