@@ -36,6 +36,10 @@ from engineering_tools.plotting.colors import (
     make_linear_colormap,
 )
 
+from engineering_tools.plotting.scatter import (
+    scatter_with_filter
+)
+
 __all__ = [
     # Styles
     "ENGINEERING_STYLE",
@@ -60,4 +64,7 @@ __all__ = [
     "rgb255_sequence_to_rgb01",
     "make_listed_colormap",
     "make_linear_colormap",
+
+    # Scatter
+    "scatter_with_filter"
 ]
