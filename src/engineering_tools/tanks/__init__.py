@@ -6,7 +6,7 @@ from engineering_tools.tanks.basic_calcs import (
 )
 
 from engineering_tools.tanks.fea_helpers import (
-    convolve,
+    convolve_nodes,
 )
 
 __all__ = [
@@ -14,5 +14,5 @@ __all__ = [
     "head",
 
     # FEA helpers
-    "convolve"
+    "convolve_nodes"
 ]
