@@ -7,6 +7,9 @@ def read_nodes(path: Path) -> dict[str, list[int | float]]:
     """
     Reads the nodes from a txt file output from ANSYS APDL.  Returns a dict
     containing the NODE number and the X, Y, and Z coordinates.
+
+    typical usage:
+    >>> nodes = pd.DataFrame(read_nodes(...))
     """
     nodes: dict[str, list[int | float]] = {}
 
@@ -96,7 +99,7 @@ def read_prnsol(path: Path) -> dict[str, list[int | float]]:
 
 def read_prnsol_files_to_dataframe(file_paths: list[Path | str]) -> pd.DataFrame:
     """
-    Reads multiplr PRNSOL-style test files and returns one combined DataFrame.
+    Reads multiple PRNSOL-style test files and returns one combined DataFrame.
 
     Rules:
     - First relevant line starts with "NODE" and defines headers.
@@ -151,6 +154,21 @@ def read_linearized_stress():
     # TODO: read linearized stress
     raise NotImplementedError
 
+
 def read_elements():
     # TODO: read elements
     raise NotImplementedError
+
+
+def merge_results_to_nodes_dataframe(nodes_df: pd.DataFrame,
+                                     results_df: pd.DataFrame,
+                                     ansys_result_label: str,
+                                     result_label: str) -> pd.DataFrame:
+    """
+    Merge the results from 'read_prnsol_files_to_dataframe()' to the nodes DataFrame.
+    reads the column with header 'ansys_result_label' and renames it to 'result_label'.
+    """
+    return nodes_df.merge(
+        results_df[["NODE", ansys_result_label]],
+        on="NODE", how="left").rename(
+        columns={ansys_result_label: result_label})
