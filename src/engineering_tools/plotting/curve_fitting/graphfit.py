@@ -17,33 +17,49 @@ class FilterOptions:
     x_max: float | None = None
     y_min: float | None = None
     y_max: float | None = None
-
     monotonic: Literal["none", "increasing", "decreasing"] = "none"
-
     sigma_clip: bool = False
     sigma_clip_threshold: float = 3.0
-
     custom_filter: Callable[[np.ndarray, np.ndarray], np.ndarray] = None
 
 
 @dataclass
 class ChartOptions:
+    """
+    Options for customizing the appearance of the curve fit plot.
+        title: str
+        xlabel: str
+        ylabel: str
+        xlim: tuple[float | None, float | None] | None
+        ylim: tuple[float | None, float | None] | None
+        log_x: bool
+        log_y: bool
+        figsize: tuple[float, float]
+        show_legend: bool
+        show_equation: bool
+        equation_position: tuple[float, float]
+        equation_sig_figs: int
+        equation_fontsize: int = 10
+        curve_color: str = "black"
+        scatter_color: str = "darkgray"
+        filter_color: str = "lightgray"
+    """
     title: str = "Curve Fit"
     xlabel: str = "X"
     ylabel: str = "Y"
-
     xlim: tuple[float | None, float | None] | None = None
     ylim: tuple[float | None, float | None] | None = None
-
     log_x: bool = False
     log_y: bool = False
-
     figsize: tuple[float, float] = (6.0, 4.0)
-
     show_legend: bool = False
     show_equation: bool = True
-
     equation_position: tuple[float, float] = (0.05, 0.95)
+    equation_sig_figs: int = 4
+    equation_fontsize: int = 10
+    curve_color: str = "black"
+    scatter_color: str = "darkgray"
+    filter_color: str = "lightgray"
 
 
 @dataclass
@@ -52,13 +68,10 @@ class FitResult:
     param_names: tuple[str, ...]
     params: np.ndarray
     covariance: np.ndarray
-
     x: np.ndarray
     y: np.ndarray
-
     used_mask: np.ndarray
     filtered_mask: np.ndarray
-
     equation_latex: str
     residuals: np.ndarray
     residual_sigma: float
@@ -296,7 +309,7 @@ def fit(data: pd.DataFrame | ArrayLike,
         y=y_values,
         used_mask=mask,
         filtered_mask=filtered_mask,
-        equation_latex=curve_model.equation_latex(params),
+        equation_latex=curve_model.equation_latex(params, 4),
         residuals=residuals,
         residual_sigma=residual_sigma,
         r_squared=r_squared
@@ -348,12 +361,12 @@ def plot(result: FitResult,
     fig, ax = plt.subplots(figsize=chart.figsize)
 
     # plot all data in grey
-    ax.scatter(result.x, result.y, color='grey', alpha=0.5, s=1,
+    ax.scatter(result.x, result.y, color=chart.scatter_color, alpha=0.5, s=1,
                label='Original Data', zorder=1)
 
     # overlay filtered/excluded data in light grey.
     ax.scatter(result.x[result.filtered_mask], result.y[result.filtered_mask],
-               color='lightgrey', alpha=1.0, s=1, label='Filtered Data', zorder=2)
+               color=chart.filter_color, alpha=1.0, s=1, label='Filtered Data', zorder=2)
 
     # plot curve
     curve_x = _curve_x_values(result.x[result.used_mask],
@@ -362,13 +375,17 @@ def plot(result: FitResult,
 
     curve_y = curve_model.func(curve_x, *result.params)
 
-    ax.plot(curve_x, curve_y, color="black", linewidth=1.5,
+    ax.plot(curve_x, curve_y, color=chart.curve_color,
+            linewidth=1.5,
             label="Curve fit", zorder=3)
 
     if chart.show_equation:
+        equation_text = curve_model.equation_latex(result.params, chart.equation_sig_figs)
+
         ax.text(chart.equation_position[0], chart.equation_position[1],
-                result.equation_latex, va="top", ha="left",
+                equation_text, va="top", ha="left",
                 transform=ax.transAxes,
+                fontsize=chart.equation_fontsize,
                 bbox={"boxstyle": "round",
                       "facecolor": "white",
                       "edgecolor": "black",
@@ -427,3 +444,11 @@ def result_table(result: FitResult) -> pd.DataFrame:
         {"parameter": result.param_names,
          "value": result.params}
     )
+
+
+def equation_latex(result: FitResult, sig_figs: int = 4) -> str:
+    """
+    Return the equation as a LaTeX string.
+    """
+    curve_model = CURVE_MODELS[result.model_name]
+    return curve_model.equation_latex(result.params, sig_figs)

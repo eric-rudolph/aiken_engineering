@@ -26,7 +26,7 @@ from matplotlib.pyplot import savefig
 
 ENGINEERING_STYLE: dict[str, object] = {
     # Figure
-    "figure.figsize": (8, 5),
+    "figure.figsize": (6.0, 4.0),
     "figure.dpi": 120,
     "savefig.dpi": 300,
     "savefig.bbox": "tight",
@@ -64,7 +64,7 @@ REPORT_STYLE: dict[str, object] = {
     **ENGINEERING_STYLE,
 
     # Better for reports and saved figures
-    "figure.figsize": (6.5, 4.5),
+    "figure.figsize": (6.0, 4.0),
     "figure.dpi": 120,
     "savefig.dpi": 300,
 

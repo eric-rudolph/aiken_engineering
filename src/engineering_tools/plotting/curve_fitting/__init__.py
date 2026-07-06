@@ -31,7 +31,8 @@ from .graphfit import (
     fit,
     plot,
     fit_and_plot,
-    result_table)
+    result_table,
+    equation_latex)
 
 __all__ = [
     "FilterOptions",
@@ -40,4 +41,5 @@ __all__ = [
     "fit",
     "plot",
     "fit_and_plot",
-    "result_table"]
+    "result_table",
+    "equation_latex"]

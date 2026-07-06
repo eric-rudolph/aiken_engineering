@@ -7,7 +7,7 @@ from matplotlib.colors import ListedColormap
 def scatter_with_filter(
         data: dict[str, np.ndarray],
         title: str,
-        size: tuple[int | float, int | float] = (20, 5),
+        size: tuple[int | float, int | float] = (6.0, 4.0),
         color: str = "hsv",
         s: float = 2.0,
         colors_rgb: ListedColormap | None = None,

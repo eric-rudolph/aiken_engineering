@@ -124,3 +124,22 @@ def make_linear_colormap(colors: Sequence[RGB255],
 
 ANSYS_LISTED_CMAP = make_listed_colormap(ANSYS_COLORS, name="ansys")
 ANSYS_LINEAR_CMAP = make_linear_colormap(ANSYS_COLORS, name="ansys_smooth")
+
+AIKEN_COLORS = {
+    "red": rgb255_to_rgb01((101, 20, 0)),
+    "yellow": rgb255_to_rgb01((252, 238, 33)),
+    "paleyellow": rgb255_to_rgb01((254, 248, 166)),
+    "darkgreen": rgb255_to_rgb01((0, 104, 55)),
+    "green": rgb255_to_rgb01((51, 134, 95)),
+    "palegreen": rgb255_to_rgb01((153, 195, 175)),
+    "darkblue": rgb255_to_rgb01((0, 85, 141)),
+    "blue": rgb255_to_rgb01((0, 113, 188)),
+    "paleblue": rgb255_to_rgb01((102, 153, 187)),
+    "lightblue": rgb255_to_rgb01((204, 221, 232)),
+    "black": rgb255_to_rgb01((0, 0, 0)),
+    "darkgray": rgb255_to_rgb01((64, 64, 64)),
+    "gray": rgb255_to_rgb01((128, 128, 128)),
+    "lightgray": rgb255_to_rgb01((179, 179, 179)),
+    "palegray": rgb255_to_rgb01((230, 230, 230)),
+    "white": rgb255_to_rgb01((255, 255, 255)),
+}
