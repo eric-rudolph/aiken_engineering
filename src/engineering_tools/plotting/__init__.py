@@ -8,7 +8,18 @@ This subpackage provides:
 - Matplotlib style configuration
 - Engineering-focused plotting helpers
 - Domain-specific plotting functions
+- Curve-fitting utilities
 """
+
+from engineering_tools.plotting.curve_fitting import (
+    FilterOptions,
+    ChartOptions,
+    FitResult,
+    fit,
+    plot,
+    fit_and_plot,
+    result_table
+)
 
 from engineering_tools.plotting.styles import (
     ENGINEERING_STYLE,
@@ -67,4 +78,13 @@ __all__ = [
 
     # Scatter
     "scatter_with_filter"
+
+    # Curve fitting
+    "FilterOptions",
+    "ChartOptions",
+    "FitResult",
+    "fit",
+    "plot",
+    "fit_and_plot",
+    "result_table",
 ]

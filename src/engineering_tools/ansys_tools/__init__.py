@@ -12,6 +12,7 @@ from engineering_tools.ansys_tools.read_files import (
     read_prnsol_files_to_dataframe,
     read_linearized_stress,
     read_elements,
+    merge_results_to_nodes_dataframe
 )
 
 __all__ = [
@@ -21,4 +22,5 @@ __all__ = [
     "read_prnsol_files_to_dataframe",
     "read_linearized_stress",
     "read_elements",
+    "merge_results_to_nodes_dataframe",
 ]
