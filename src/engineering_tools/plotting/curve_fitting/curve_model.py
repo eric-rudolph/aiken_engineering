@@ -57,12 +57,24 @@ def _exponential(x: ArrayLike | float, a: float, b: float, c: float) -> ArrayLik
     return a * np.exp(b * x) + c
 
 
+def _exp_plus_linear(x: ArrayLike | float, a: float, b: float, c: float, d: float) -> ArrayLike | float:
+    return a * np.exp(b * x) + c * x + d
+
+
 def _logarithmic(x: ArrayLike | float, a: float, b: float) -> ArrayLike | float:
     return a * np.log(x) + b
 
 
 def _power(x: ArrayLike | float, a: float, b: float, c: float) -> ArrayLike | float:
     return a * np.power(x, b) + c
+
+
+def _cosine(x: ArrayLike | float, a: float, b: float, c: float, d: float) -> ArrayLike | float:
+    return a * np.cos(b * x + c) + d
+
+
+def _hyperbola(x: ArrayLike | float, a: float, b: float, c: float) -> ArrayLike | float:
+    return x / (a * x + b) + c
 
 
 linear_curve_model = CurveModel(
@@ -72,8 +84,7 @@ linear_curve_model = CurveModel(
     min_points=2,
     domain=_finite_domain,
     initial_guess=lambda x, y: [1.0, float(np.mean(y))],
-    equation_latex=lambda p, sf: rf"$y = {_fmt_float(p[0], sf)}x "
-                             rf"{_fmt_signed_float(p[1], sf)}$"
+    equation_latex=lambda p, sf: rf"$y = {_fmt_float(p[0], sf)}x {_fmt_signed_float(p[1], sf)}$"
 )
 
 quadratic_curve_model = CurveModel(
@@ -83,9 +94,8 @@ quadratic_curve_model = CurveModel(
     min_points=3,
     domain=_finite_domain,
     initial_guess=lambda x, y: [1.0, 0.0, float(np.mean(y))],
-    equation_latex=lambda p, sf: rf"{_fmt_float(p[0], sf)}x^2 "
-                             rf"{_fmt_signed_float(p[1], sf)}x "
-                             rf"{_fmt_signed_float(p[2], sf)}"
+    equation_latex=lambda p,
+                          sf: rf"$y = {_fmt_float(p[0], sf)}x^2 {_fmt_signed_float(p[1], sf)}x {_fmt_signed_float(p[2], sf)}$"
 )
 
 cubic_curve_model = CurveModel(
@@ -95,10 +105,8 @@ cubic_curve_model = CurveModel(
     min_points=4,
     domain=_finite_domain,
     initial_guess=lambda x, y: [1.0, 1.0, 1.0, float(np.mean(y))],
-    equation_latex=lambda p, sf: rf"{_fmt_float(p[0], sf)}x^3 "
-                             rf"{_fmt_signed_float(p[1], sf)}x^2 "
-                             rf"{_fmt_signed_float(p[2], sf)}x "
-                             rf"{_fmt_signed_float(p[3], sf)}"
+    equation_latex=lambda p,
+                          sf: rf"$y = {_fmt_float(p[0], sf)}x^3 {_fmt_signed_float(p[1], sf)}x^2 {_fmt_signed_float(p[2], sf)}x {_fmt_signed_float(p[3], sf)}$"
 )
 
 exponential_curve_model = CurveModel(
@@ -110,8 +118,22 @@ exponential_curve_model = CurveModel(
     initial_guess=lambda x, y: [float(np.max(y) - np.mean(y) or 1.0),
                                 0.01,
                                 float(np.min(y))],
-    equation_latex=lambda p, sf: rf"{_fmt_float(p[0], sf)}e^{{{_fmt_float(p[1], sf)}x}} "
-                             rf"{_fmt_signed_float(p[2], sf)}"
+    equation_latex=lambda p,
+                          sf: rf"$y = {_fmt_float(p[0], sf)}e^{{{_fmt_float(p[1], sf)}x}} {_fmt_signed_float(p[2], sf)}$"
+)
+
+exp_plus_linear_curve_model = CurveModel(
+    name="exp_plus_linear",
+    func=_exp_plus_linear,
+    param_names=("a", "b", "c", "d"),
+    min_points=4,
+    domain=_finite_domain,
+    initial_guess=lambda x, y: [float(np.max(y) - np.mean(y) or 1.0),
+                                0.01,
+                                1.0,
+                                float(np.min(y))],
+    equation_latex=lambda p,
+                          sf: rf"$y = {_fmt_float(p[0], sf)}e^{{{_fmt_float(p[1], sf)}x}} {_fmt_signed_float(p[2], sf)}x {_fmt_signed_float(p[3], sf)}$"
 )
 
 logarithmic_curve_model = CurveModel(
@@ -121,8 +143,7 @@ logarithmic_curve_model = CurveModel(
     min_points=2,
     domain=_positive_x_domain,
     initial_guess=lambda x, y: [1.0, float(np.mean(y))],
-    equation_latex=lambda p, sf: rf"{_fmt_float(p[0], sf)} \ln(x) "
-                             rf"{_fmt_signed_float(p[1], sf)})"
+    equation_latex=lambda p, sf: rf"$y = {_fmt_float(p[0], sf)} \ln(x) {_fmt_signed_float(p[1], sf)}$"
 )
 
 power_curve_model = CurveModel(
@@ -132,8 +153,32 @@ power_curve_model = CurveModel(
     min_points=3,
     domain=_positive_x_domain,
     initial_guess=lambda x, y: [1.0, 1.0, 1.0],
-    equation_latex=lambda p, sf: rf"$y = {_fmt_float(p[0], sf)}x^{{{_fmt_float(p[1], sf)}}} "
-                             rf"{_fmt_signed_float(p[2], sf)}$"
+    equation_latex=lambda p,
+                          sf: rf"$y = {_fmt_float(p[0], sf)}x^{{{_fmt_float(p[1], sf)}}} {_fmt_signed_float(p[2], sf)}$"
+)
+
+cosine_curve_model = CurveModel(
+    name="cosine",
+    func=_cosine,
+    param_names=("a", "b", "c", "d"),
+    min_points=4,
+    domain=_finite_domain,
+    initial_guess=lambda x, y: [float(np.max(y) - np.mean(y) or 1.0),
+                                2 * np.pi * (float(np.max(x)) - float(np.min(x))),
+                                1.0,
+                                float(np.min(y))],
+    equation_latex=lambda p,
+                          sf: rf"$y = {_fmt_float(p[0], sf)} \cos({_fmt_float(p[1], sf)}x {_fmt_signed_float(p[2], sf)}) {_fmt_signed_float(p[3], sf)}$"
+)
+
+hyperbola_curve_model = CurveModel(
+    name="hyperbola",
+    func=_hyperbola,
+    param_names=("a", "b"),
+    min_points=2,
+    domain=_positive_x_domain,
+    initial_guess=lambda x, y: [1.0, 1.0, float(np.mean(y))],
+    equation_latex=lambda p, sf: rf"$y = /frac{{x}}{{{_fmt_float(p[0], sf)}x {_fmt_signed_float(p[1], sf)}}}  {_fmt_signed_float(p[2], sf)}$"
 )
 
 CURVE_MODELS: dict[str, CurveModel] = {
@@ -141,6 +186,9 @@ CURVE_MODELS: dict[str, CurveModel] = {
     "quadratic": quadratic_curve_model,
     "cubic": cubic_curve_model,
     "exponential": exponential_curve_model,
+    "exp_plus_linear": exp_plus_linear_curve_model,
     "logarithmic": logarithmic_curve_model,
     "power": power_curve_model,
+    "cosine": cosine_curve_model,
+    "hyperbola": hyperbola_curve_model,
 }
