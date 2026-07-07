@@ -58,8 +58,8 @@ class ChartOptions:
     equation_sig_figs: int = 4
     equation_fontsize: int = 10
     curve_color: str = "black"
-    scatter_color: str = "darkgray"
-    filter_color: str = "lightgray"
+    scatter_color: str = "dimgray"
+    filter_color: str = "darkgray"
 
 
 @dataclass
@@ -361,7 +361,7 @@ def plot(result: FitResult,
     fig, ax = plt.subplots(figsize=chart.figsize)
 
     # plot all data in grey
-    ax.scatter(result.x, result.y, color=chart.scatter_color, alpha=0.5, s=1,
+    ax.scatter(result.x, result.y, color=chart.scatter_color, alpha=1.0, s=1,
                label='Original Data', zorder=1)
 
     # overlay filtered/excluded data in light grey.
@@ -386,10 +386,8 @@ def plot(result: FitResult,
                 equation_text, va="top", ha="left",
                 transform=ax.transAxes,
                 fontsize=chart.equation_fontsize,
-                bbox={"boxstyle": "round",
-                      "facecolor": "white",
-                      "edgecolor": "black",
-                      "alpha": 0.85})
+                backgroundcolor=(1, 1, 1, .85),
+                )
 
     ax.set_title(chart.title)
     ax.set_xlabel(chart.xlabel)
